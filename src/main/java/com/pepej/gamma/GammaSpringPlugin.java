@@ -1,4 +1,4 @@
-package com.pepej.springtest;
+package com.pepej.gamma;
 
 import com.pepej.papi.ap.Plugin;
 import com.pepej.papi.spring.SpringPapiJavaPlugin;
@@ -8,9 +8,9 @@ import com.pepej.papi.spring.SpringPapiJavaPlugin;
         version = "1.1.1",
         authors = "pepej",
         hardDepends = "papi")
-public class PapiTestSpringPlugin extends SpringPapiJavaPlugin {
+public class GammaSpringPlugin extends SpringPapiJavaPlugin {
     @Override
     protected Class<?> getApplicationClass() {
-        return PapiTestSpringApplication.class;
+        return GammaSpringApplication.class;
     }
 }

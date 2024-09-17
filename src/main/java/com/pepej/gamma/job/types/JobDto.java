@@ -1,4 +1,4 @@
-package com.pepej.springtest.job.types;
+package com.pepej.gamma.job.types;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

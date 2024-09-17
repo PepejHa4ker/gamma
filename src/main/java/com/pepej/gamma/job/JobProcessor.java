@@ -1,8 +1,8 @@
-package com.pepej.springtest.job;
+package com.pepej.gamma.job;
 
-import com.pepej.springtest.job.handler.JobHandler;
-import com.pepej.springtest.job.types.JobDto;
-import com.pepej.springtest.job.types.JobType;
+import com.pepej.gamma.job.handler.JobHandler;
+import com.pepej.gamma.job.types.JobDto;
+import com.pepej.gamma.job.types.JobType;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

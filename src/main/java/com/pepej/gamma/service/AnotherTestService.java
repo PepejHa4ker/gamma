@@ -1,17 +1,13 @@
-package com.pepej.springtest.service;
+package com.pepej.gamma.service;
 
 import com.pepej.papi.command.Commands;
-import com.pepej.papi.events.command.CommandCallEvent;
-import com.pepej.springtest.job.JobPersistenceService;
-import com.pepej.springtest.job.types.GameMessageJob;
-import com.pepej.springtest.job.types.JobDto;
-import com.pepej.springtest.job.types.PlayerSendMessageJob;
+import com.pepej.gamma.job.JobPersistenceService;
+import com.pepej.gamma.job.types.GameMessageJob;
+import com.pepej.gamma.job.types.PlayerSendMessageJob;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,11 +15,10 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Profile("test")
 public class AnotherTestService {
 
-
     private final JobPersistenceService persistenceService;
-
 
     @PostConstruct
     public void init() {

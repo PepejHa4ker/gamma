@@ -1,8 +1,8 @@
-package com.pepej.springtest.job.handler;
+package com.pepej.gamma.job.handler;
 
 import com.pepej.papi.utils.Players;
-import com.pepej.springtest.job.types.GameMessageJob;
-import com.pepej.springtest.job.types.JobType;
+import com.pepej.gamma.job.types.GameMessageJob;
+import com.pepej.gamma.job.types.JobType;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
-package com.pepej.springtest.job.handler;
+package com.pepej.gamma.job.handler;
 
-import com.pepej.springtest.job.types.JobDto;
-import com.pepej.springtest.job.types.JobType;
+import com.pepej.gamma.job.types.JobDto;
+import com.pepej.gamma.job.types.JobType;
 
 public interface JobHandler<T extends JobDto> {
 

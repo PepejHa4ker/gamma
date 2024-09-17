@@ -1,4 +1,4 @@
-package com.pepej.springtest.job.types;
+package com.pepej.gamma.job.types;
 
 public enum JobType {
     PLAYER_MESSAGE,

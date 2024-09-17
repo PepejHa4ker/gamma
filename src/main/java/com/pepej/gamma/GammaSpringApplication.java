@@ -1,10 +1,10 @@
-package com.pepej.springtest;
+package com.pepej.gamma;
 
-import com.pepej.springtest.config.KafkaConfig;
+import com.pepej.gamma.config.KafkaConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Import(KafkaConfig.class)
-public class PapiTestSpringApplication {
+public class GammaSpringApplication {
 }

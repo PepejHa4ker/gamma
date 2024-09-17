@@ -1,6 +1,6 @@
-package com.pepej.springtest.job;
+package com.pepej.gamma.job;
 
-import com.pepej.springtest.job.types.JobDto;
+import com.pepej.gamma.job.types.JobDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
