@@ -28,8 +28,9 @@ public class JobProcessor {
             log.error("No handler for type {}", jobDto.getJobType());
             return;
         }
-        if (!jobHandler.isTypedJobValid(jobDto)) {
-            log.error("Job with id {} is not valid", jobDto.getId());
+        JobValidationResult jobValidationResult = jobHandler.validateJob(jobDto);
+        if (!jobValidationResult.isSuccess()) {
+            log.error("Job with id {} is not valid {}", jobDto.getId(), jobValidationResult.getErrorMessage());
             return;
         }
 

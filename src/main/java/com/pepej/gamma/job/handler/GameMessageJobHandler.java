@@ -1,5 +1,6 @@
 package com.pepej.gamma.job.handler;
 
+import com.pepej.gamma.job.JobValidationResult;
 import com.pepej.papi.utils.Players;
 import com.pepej.gamma.job.types.GameMessageJob;
 import com.pepej.gamma.job.types.JobType;
@@ -9,14 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class GameMessageJobHandler extends AbstractJobHandler<GameMessageJob> {
+public class GameMessageJobHandler implements JobHandler<GameMessageJob> {
 
-    public GameMessageJobHandler() {
-        super(JobType.GAME_MESSAGE);
-    }
 
     @Override
-    void handleTypedJob(GameMessageJob jobDto) {
+    public void handleJob(GameMessageJob jobDto) {
         Player receiver = Players.getNullable(jobDto.getReceiverId());
 
         if (receiver == null) {
@@ -28,7 +26,15 @@ public class GameMessageJobHandler extends AbstractJobHandler<GameMessageJob> {
     }
 
     @Override
-    public boolean isTypedJobValid(GameMessageJob jobDto) {
-        return Players.get(jobDto.getReceiverId()).isPresent();
+    public JobValidationResult validateJob(GameMessageJob jobDto) {
+        if (Players.get(jobDto.getReceiverId()).isEmpty()) {
+            return JobValidationResult.error("Player with id " + jobDto.getReceiverId() + " not found");
+        }
+        return JobValidationResult.ok();
+    }
+
+    @Override
+    public JobType getJobType() {
+        return JobType.GAME_MESSAGE;
     }
 }
