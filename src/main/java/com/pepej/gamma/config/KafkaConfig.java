@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.pepej.gamma.job.types.JobDto;
+import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -33,7 +34,9 @@ public class KafkaConfig {
 
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, JobDto> kafkaJobListenerContainerFactory(ConsumerFactory<String, JobDto> consumerFactory) {
+    ConcurrentKafkaListenerContainerFactory<String, JobDto> kafkaJobListenerContainerFactory(
+            ConsumerFactory<String, JobDto> consumerFactory
+    ) {
         ConcurrentKafkaListenerContainerFactory<String, JobDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
@@ -44,17 +47,33 @@ public class KafkaConfig {
 
 
     @Bean
-    public NewTopic jobsTopic() {
-        return TopicBuilder.name("jobs")
-                .partitions(10)
+    public KafkaAdmin admin(KafkaPersistenceProperties kafkaPersistenceProperties) {
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaPersistenceProperties.getBootstrapServer());
+        return new KafkaAdmin(configs);
+    }
+
+    @Bean
+    public NewTopic jobsTopic(KafkaPersistenceProperties kafkaPersistenceProperties) {
+        return TopicBuilder.name(kafkaPersistenceProperties.getJobsTopicName())
+                .partitions(1)
+                .replicas(1)
+                .build();
+
+    }
+
+    @Bean
+    public NewTopic scheduledJobsTopic(KafkaPersistenceProperties kafkaPersistenceProperties) {
+        return TopicBuilder.name(kafkaPersistenceProperties.getScheduledJobsTopicName())
+                .partitions(1)
                 .replicas(1)
                 .build();
     }
 
     @Bean
     @Primary
-    public ConsumerFactory<String, JobDto> consumerFactory() {
-        DefaultKafkaConsumerFactory<String, JobDto> kafkaConsumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps());
+    public ConsumerFactory<String, JobDto> consumerFactory(KafkaPersistenceProperties kafkaPersistenceProperties) {
+        DefaultKafkaConsumerFactory<String, JobDto> kafkaConsumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps(kafkaPersistenceProperties));
         kafkaConsumerFactory.setKeyDeserializer(new StringDeserializer());
         JsonDeserializer<JobDto> valueDeserializer = new JsonDeserializer<>(JobDto.class, objectMapper(), false);
         valueDeserializer.addTrustedPackages("*");
@@ -62,9 +81,9 @@ public class KafkaConfig {
         return kafkaConsumerFactory;
     }
 
-    private Map<String, Object> consumerProps() {
+    private Map<String, Object> consumerProps(KafkaPersistenceProperties kafkaPersistenceProperties) {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaPersistenceProperties.getBootstrapServer());
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "s");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return props;
@@ -83,31 +102,20 @@ public class KafkaConfig {
     }
 
     @Bean
-    KafkaTemplate<String, JobDto> jobKafkaTemplate() {
-        StringSerializer keySerializer = new StringSerializer();
-
-        JsonSerializer<JobDto> valueJsonSerializer = new JsonSerializer<>(objectMapper());
-
+    KafkaTemplate<String, JobDto> jobKafkaTemplate(KafkaPersistenceProperties kafkaPersistenceProperties) {
         return new KafkaTemplate<>(
                 new DefaultKafkaProducerFactory<>(
-                        senderProps(),
-                        keySerializer,
-                        valueJsonSerializer));
+                        senderProps(kafkaPersistenceProperties),
+                        new StringSerializer(),
+                        new JsonSerializer<>(objectMapper())));
     }
 
-    private Map<String, Object> senderProps() {
+    private Map<String, Object> senderProps(KafkaPersistenceProperties kafkaPersistenceProperties) {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaPersistenceProperties.getBootstrapServer());
         props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return props;
     }
-
-//  x
-
-//    @Bean
-//    public KafkaTemplate<String, JobDto> jobKafkaTemplate(ProducerFactory<String, JobDto> producerFactory) {
-//        return new KafkaTemplate<>(producerFactory);
-//    }
 }

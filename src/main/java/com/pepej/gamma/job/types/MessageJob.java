@@ -16,8 +16,8 @@ public abstract class MessageJob extends JobDto {
     private String message;
 
 
-    public MessageJob(String jobName, JobType jobType,UUID receiverId, String message) {
-        super(jobName, jobType);
+    public MessageJob(String jobName, JobType jobType,UUID receiverId, String message, String serverId) {
+        super(jobName, jobType, receiverId, serverId);
         this.receiverId = receiverId;
         this.message = message;
     }

@@ -44,3 +44,6 @@ bin/
 .DS_Store
 
 test-server
+/gradlew
+/gradlew.bat
+/settings.gradle.kts

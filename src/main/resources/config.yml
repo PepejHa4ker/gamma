@@ -1,3 +1,15 @@
 spring:
   application:
     name: gamma
+logging:
+  level:
+    org.springframework.kafka.*: OFF
+    org.springframework.kafka.listener.[KafkaMessageListenerContainer$ListenerConsumer]: OFF
+    org.apache.kafka.*: OFF
+    kafka.*: OFF
+    org.apache.zookeeper.*: OFF
+persistence:
+  bootstrap-server: localhost:29092
+  group-id: gamma
+  jobs-topic-name: jobs-gamma
+  scheduled-jobs-topic-name: scheduled-jobs-gamma

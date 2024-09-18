@@ -1,6 +1,5 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import java.net.URI
-import java.nio.file.Paths
 
 buildscript {
     repositories {
@@ -22,6 +21,11 @@ plugins {
 group = "com.pepej"
 version = "0.1"
 
+tasks.withType<JavaCompile> {
+    sourceCompatibility = "21"
+    targetCompatibility = "21"
+}
+
 tasks.withType<BootJar> {
     enabled = false
 }
@@ -30,6 +34,7 @@ repositories {
     mavenCentral()
     maven { url = URI("https://hub.spigotmc.org/nexus/content/groups/public/") }
     maven { url = URI("https://oss.squareland.ru/repository/minecraft") }
+
 }
 
 dependencies {
@@ -41,12 +46,17 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("com.pepej:papi-core:2.6.4")
     annotationProcessor("com.pepej:papi-core:2.6.4")
-    implementation("com.pepej:papi-spring:0.0.15")
-    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    implementation("com.pepej:papi-spring:1.2.0")
+    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT") {
+        exclude("com.google.guava", "guava")
+    }
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.kafka:spring-kafka:3.2.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("com.pepej:papi-core:2.6.4")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.0")
 }
 
 tasks.test {

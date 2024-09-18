@@ -17,9 +17,10 @@ public class PlayerSendMessageJob extends MessageJob {
     public PlayerSendMessageJob(
             UUID senderId,
             UUID receiverId,
-            String message
+            String message,
+            String serverId
     ) {
-        super("player-message", JobType.PLAYER_MESSAGE, receiverId, message);
+        super("player-message", JobType.PLAYER_MESSAGE, receiverId, message, serverId);
         this.senderId = senderId;
     }
 }

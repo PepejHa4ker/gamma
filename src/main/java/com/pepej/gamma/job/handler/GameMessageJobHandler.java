@@ -12,17 +12,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class GameMessageJobHandler implements JobHandler<GameMessageJob> {
 
-
     @Override
     public void handleJob(GameMessageJob jobDto) {
         Player receiver = Players.getNullable(jobDto.getReceiverId());
-
         if (receiver == null) {
             return;
         }
-
         log.debug("{} received game message {}", receiver.getName(), jobDto.getMessage());
-
     }
 
     @Override

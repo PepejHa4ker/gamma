@@ -1,5 +1,6 @@
 package com.pepej.gamma.job;
 
+import com.pepej.gamma.config.KafkaPersistenceProperties;
 import com.pepej.gamma.job.types.JobDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,18 @@ public class JobListener {
 
     private final ConcurrentKafkaListenerContainerFactory<String, JobDto> kafkaJobListenerContainerFactory;
     private final JobProcessor jobProcessor;
+    private final KafkaPersistenceProperties kafkaPersistenceProperties;
 
     @PostConstruct
     public void init() {
         log.info("Job listener started");
+        log.info("Job listener configuration: {}", kafkaPersistenceProperties);
     }
 
     @KafkaListener(
-            topics = "jobs",
+            topics = "#{kafkaPersistenceProperties.jobsTopicName}",
             containerFactory = "kafkaJobListenerContainerFactory",
+            groupId = "#{kafkaPersistenceProperties.groupId}",
             id = JOB_LISTENER_ID
     )
     public void onJobReceived(final ConsumerRecord<String, ? extends JobDto> record) {

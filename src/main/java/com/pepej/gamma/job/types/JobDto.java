@@ -19,12 +19,16 @@ import java.util.UUID;
 })
 public class JobDto {
     private UUID id;
+    private UUID issuerId;
+    private String serverId;
     private String jobName;
     private JobType jobType;
 
-    public JobDto(String jobName, JobType jobType) {
+    public JobDto(String jobName, JobType jobType, UUID issuerId, String serverId) {
         this.id = UUID.randomUUID();
         this.jobName = jobName;
+        this.issuerId = issuerId;
+        this.serverId = serverId;
         this.jobType = jobType;
     }
 

@@ -13,7 +13,7 @@ public class GameMessageJob extends MessageJob {
 
     private static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-    public GameMessageJob(UUID receiverId, String message) {
-        super("game-message", JobType.GAME_MESSAGE, receiverId , message);
+    public GameMessageJob(UUID receiverId, String message, String serverId) {
+        super("game-message", JobType.GAME_MESSAGE, receiverId , message, serverId);
     }
 }
